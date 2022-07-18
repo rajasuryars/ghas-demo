@@ -4,7 +4,7 @@ _______________________________________________________
 I have used a windows machine to run my project on two virtual machines.
 ______________________________________________________
 
-In the first machine(say a) do the following commands.
+In the first machine(say 01) do the following commands.
 
 #mkdir Server
 
@@ -32,7 +32,7 @@ java server
 Listening to port: 5000
 _______________________________________________________
 
-In the second machine(say b) do the following commands.
+In the second machine(say 02) do the following commands.
 
 #mkdir Client
 
@@ -69,7 +69,7 @@ After this, you will get a prompt to Enter message. Type anything there like "Co
 _________________________________________________________
 Proof of Execution:
 
-You can check in the Server (machine-a) by using the command,
+You can check in the Server (machine-01) by using the command,
 
 #cd D1copy/
 
@@ -78,7 +78,7 @@ You can check in the Server (machine-a) by using the command,
 You will see "D1copy" directory which will contain the files F1 and F2 sent by the Client.
 
 _______________________________________________________
-Output of machine-a:
+Output of machine-01:
 
 java Server
 Listening to port: 5000
@@ -90,7 +90,7 @@ File F1 received successfully!
 File F2 received successfully!
 Message from client: End of Session
 
-Output of machine-b:
+Output of machine-02:
 
 java Client
 Enter message: Copy the files
