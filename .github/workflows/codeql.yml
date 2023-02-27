@@ -1,19 +1,43 @@
-name: CodeQL Analysis
+name: "CodeQL"
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  schedule:
+    - cron: '30 4 * * 5'
 
 jobs:
-  build:
+  analyze:
+    name: Analyze
     runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'java' ]
+
     steps:
-    - uses: actions/checkout@v2
-    - name: Initializing CodeQL
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Initialize CodeQL
       uses: github/codeql-action/init@v2
       with:
-        args: --init
-    - name: Analyzing code with CodeQL
-      uses: github/codeql-action/init@v2
+        languages: ${{ matrix.language }}
+
+    - name: Build
+      run: |
+        codeql database create --language=${{ matrix.language }} --source-root=. ${{ matrix.language }}-db
+        codeql database analyze --format=sarif-latest ${{ matrix.language }}-db -o analysis-results.sarif
+        
+    - name: Upload results
+      uses: actions/upload-artifact@v2
       with:
-        args: analyze <path/to/code> --format=sarif-latest
+        name: analysis-results
+        path: analysis-results.sarif
