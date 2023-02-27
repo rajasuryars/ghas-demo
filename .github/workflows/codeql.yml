@@ -1,0 +1,19 @@
+name: CodeQL Analysis
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Initializing CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        args: --init
+    - name: Analyzing code with CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        args: analyze <path/to/code> --format=sarif-latest
