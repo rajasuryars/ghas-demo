@@ -23,21 +23,23 @@ jobs:
         language: [ 'java' ]
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Initialize CodeQL
-      uses: github/codeql-action/init@v2
-      with:
-        languages: ${{ matrix.language }}
+      - name: Set up CodeQL
+        uses: github/codeql-action/setup@v2
+        with:
+          languages: ${{ matrix.language }}
+      
+      - name: Install CodeQL CLI
+        run: |
+          sudo apt-get update && sudo apt-get install codeql-cli
 
-    - name: Build
-      run: |
-        codeql database create --language=${{ matrix.language }} --source-root=. ${{ matrix.language }}-db
-        codeql database analyze --format=sarif-latest ${{ matrix.language }}-db -o analysis-results.sarif
-        
-    - name: Upload results
-      uses: actions/upload-artifact@v2
-      with:
-        name: analysis-results
-        path: analysis-results.sarif
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+        with:
+          fail-on-error: true
+          category: "/language:${{matrix.language}}"
